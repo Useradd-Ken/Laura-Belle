@@ -23,8 +23,8 @@
   <span -v-if="emailError" class="text-red-500 text-sm mt-1">{{ emailError }}</span>
   <span -v-if="passwordError" class="text-red-500 text-sm mt-1">{{ passwordError }}</span>
 <div class="flex justify-between w-full mt-2 text-sm text-gray-500">
-    <a href="#" class="hover:underline">Remember Me</a>
-    <a href="#" class="hover:underline">Forgot Password?</a>
+   <RouterLink to="/reset-password" class="hover:underline">Forgot Password?</RouterLink>
+    <RouterLink to="/register" class="hover:underline">Register</RouterLink>
 </div>
        <!-- From Uiverse.io by zymantas-katinas --> 
 <button @click="validateInputs"

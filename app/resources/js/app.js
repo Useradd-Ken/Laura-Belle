@@ -1,25 +1,9 @@
 import { createApp } from "vue";
-import Login from "./Login.vue";
-import Accounting from "./Accounting.vue";
-import JournalEntry from "./JournalEntry.vue";
-import GeneralLedger from "./GenLedger.vue";
+import AppWithNav from "./AppWithNav.vue";
+import router from "./router/index.js";
 import "../css/app.css";
 
-const el = document.getElementById("app");
+const app = createApp(AppWithNav);
 
-if (el) {
-    switch (el.dataset.page) {
-        case "login":
-            createApp(Login).mount("#app");
-            break;
-        case "accounting":
-            createApp(Accounting).mount("#app");
-            break;
-        case "general-ledger":
-            createApp(GeneralLedger).mount("#app");
-            break;
-        case "journal-entry":
-            createApp(JournalEntry).mount("#app");
-            break;
-    }
-}
+app.use(router);
+app.mount("#app");

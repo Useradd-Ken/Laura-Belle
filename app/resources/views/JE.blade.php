@@ -1,9 +1,9 @@
-<!-- resources/views/general-ledger.blade.php -->
+<!-- resources/views/journal-entry.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>General Ledger</title>
+    <title>Journal Entry</title>
     @vite('resources/js/app.js') <!-- load Vue bundle -->
 </head>
 <body>
