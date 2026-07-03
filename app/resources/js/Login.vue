@@ -13,8 +13,6 @@
   />
 </div>
 
-
-
 <div class="w-full p-[1px] rounded-md bg-gradient-to-br from-cyan-500 to-blue-500 focus-within:from-blue-500 focus-within:to-cyan-700 mt-2">
   <input 
     v-model="password" 
