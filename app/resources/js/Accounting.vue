@@ -1,117 +1,355 @@
 <template>
-  <div class="max-w-6xl mx-auto px-4 py-8">
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-800">Chart of Accounts</h1>
-        <p class="text-sm text-gray-500">Manage the base accounts used by the accounting system.</p>
+  <div class="min-h-screen bg-slate-50">
+
+    <!-- Header -->
+    <div class="border-b border-slate-200 bg-white">
+      <div class="mx-auto max-w-[1800px] px-8 py-6">
+        <div class="flex items-center justify-between">
+
+          <div>
+            <h1 class="text-3xl font-bold text-slate-900">
+              Chart of Accounts
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-500">
+              Manage your organization's accounting structure.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+
+            <div class="rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-sm">
+              <p class="text-xs uppercase tracking-wide text-slate-500">
+                Total Accounts
+              </p>
+
+              <p class="text-2xl font-bold text-slate-900">
+                {{ filteredAccounts.length }}
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Search -->
+        <div class="mt-6">
+
+          <SearchBar
+            v-model="search"
+
+            :typeFilter="typeFilter"
+            :statusFilter="statusFilter"
+            :viewMode="viewMode"
+
+            :typeOptions="accountTypes"
+
+            @update:typeFilter="typeFilter = $event"
+            @update:statusFilter="statusFilter = $event"
+            @update:viewMode="viewMode = $event"
+
+            @new-account="openCreateModal"
+          />
+
+        </div>
+
       </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-      <h2 class="text-lg font-semibold mb-4">Add Account</h2>
-      <form @submit.prevent="saveAccount" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
-          <input v-model="form.account_number" required class="w-full border rounded-lg px-3 py-2" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Account Name</label>
-          <input v-model="form.account_name" required class="w-full border rounded-lg px-3 py-2" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
-          <select v-model="form.account_type" required class="w-full border rounded-lg px-3 py-2">
-            <option value="Asset">Asset</option>
-            <option value="Liability">Liability</option>
-            <option value="Equity">Equity</option>
-            <option value="Revenue">Revenue</option>
-            <option value="Expense">Expense</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Parent Account ID (optional)</label>
-          <input v-model="form.parent_id" type="number" class="w-full border rounded-lg px-3 py-2" />
-        </div>
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-          <textarea v-model="form.description" rows="2" class="w-full border rounded-lg px-3 py-2"></textarea>
-        </div>
-        <div class="md:col-span-2 flex items-center justify-between">
-          <label class="flex items-center gap-2 text-sm text-gray-600">
-            <input v-model="form.is_active" type="checkbox" class="rounded" />
-            Active
-          </label>
-          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-            Save Account
-          </button>
-        </div>
-      </form>
+    <!-- Workspace -->
+    <div class="mx-auto max-w-[1800px] px-8 py-6">
+
+      <div class="grid grid-cols-12 gap-6">
+
+        <!-- LEFT -->
+        <aside class="col-span-3">
+
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+            <div class="border-b border-slate-200 px-5 py-4">
+
+              <h2 class="font-semibold text-slate-900">
+                Account Tree
+              </h2>
+
+              <p class="mt-1 text-sm text-slate-500">
+                Browse account hierarchy
+              </p>
+
+            </div>
+
+            <div class="max-h-[700px] overflow-y-auto p-4">
+
+              <AccountTree
+                :accounts="treeAccounts"
+                :selectedAccountId="selectedAccount?.id"
+                :expandedIds="expandedIds"
+
+                @select="selectAccount"
+                @toggle-expand="toggleExpand"
+              />
+
+            </div>
+
+          </div>
+
+        </aside>
+
+        <!-- CENTER -->
+        <section class="col-span-6">
+
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+            <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+
+              <div>
+
+                <h2 class="font-semibold text-slate-900">
+                  Accounts
+                </h2>
+
+                <p class="text-sm text-slate-500">
+                  {{ filteredAccounts.length }} records
+                </p>
+
+              </div>
+
+            </div>
+
+            <div v-if="loading" class="p-12 text-center">
+
+              <div class="text-slate-500">
+                Loading accounts...
+              </div>
+
+            </div>
+
+            <div v-else>
+
+              <AccountTable
+                :accounts="filteredAccounts"
+                :selectedAccountId="selectedAccount?.id"
+
+                @select="selectAccount"
+
+                @view="selectAccount"
+
+                @edit="openEditModal"
+
+                @add-child="openChildModal"
+
+                @delete="openDeleteModal"
+              />
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- RIGHT -->
+        <aside class="col-span-3">
+
+          <AccountDetails
+            :selectedAccount="selectedAccount"
+
+            @edit="openEditModal"
+
+            @delete="openDeleteModal"
+
+            @add-child="openChildModal"
+
+            @view-ledger="viewLedger"
+          />
+
+        </aside>
+
+      </div>
+
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <div class="px-6 py-4 border-b border-gray-200">
-        <h2 class="text-lg font-semibold">Accounts</h2>
-      </div>
-      <div v-if="loading" class="p-6 text-gray-500">Loading accounts...</div>
-      <div v-else-if="accounts.length === 0" class="p-6 text-gray-500">No accounts found yet.</div>
-      <div v-else class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Number</th>
-              <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Name</th>
-              <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Type</th>
-              <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100">
-            <tr v-for="account in accounts" :key="account.id" class="hover:bg-gray-50">
-              <td class="px-4 py-3 text-sm text-gray-700">{{ account.account_number }}</td>
-              <td class="px-4 py-3 text-sm text-gray-700">{{ account.account_name }}</td>
-              <td class="px-4 py-3 text-sm text-gray-700">{{ account.account_type }}</td>
-              <td class="px-4 py-3 text-sm">
-                <span :class="account.is_active ? 'text-green-600' : 'text-red-600'">
-                  {{ account.is_active ? 'Active' : 'Inactive' }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <!-- Account Modal -->
+
+    <AccountModal
+
+      :visible="showAccountModal"
+
+      :mode="modalMode"
+
+      :form="form"
+
+      :accounts="accounts"
+
+      :accountTypes="accountTypes"
+
+      @close="closeAccountModal"
+
+      @submit="saveAccount"
+
+      @update-form="updateForm"
+
+    />
+
+    <!-- Delete -->
+
+    <DeleteModal
+
+      :visible="showDeleteModal"
+
+      :itemName="selectedAccount?.account_name"
+
+      @cancel="closeDeleteModal"
+
+      @confirm="deleteAccount"
+
+    />
+
   </div>
 </template>
-
 <script>
+import SearchBar from "./components/SearchBar.vue";
+import AccountTree from "./components/AccountTree.vue";
+import AccountTable from "./components/AccountTable.vue";
+import AccountDetails from "./components/AccountDetails.vue";
+import AccountModal from "./components/AccountModal.vue";
+import DeleteModal from "./components/DeleteModal.vue";
+
 export default {
+  name: "Accounting",
+
+  components: {
+    SearchBar,
+    AccountTree,
+    AccountTable,
+    AccountDetails,
+    AccountModal,
+    DeleteModal,
+  },
+
   data() {
     return {
-      accounts: [],
       loading: true,
+
+      // API
+      accounts: [],
+
+      // UI
+      search: "",
+      typeFilter: "all",
+      statusFilter: "all",
+      viewMode: "tree",
+
+      // Tree
+      expandedIds: [],
+
+      // Selected Account
+      selectedAccount: null,
+
+      // Modals
+      showAccountModal: false,
+      showDeleteModal: false,
+
+      modalMode: "create",
+
+      // Types
+      accountTypes: [
+        "Asset",
+        "Liability",
+        "Equity",
+        "Revenue",
+        "Expense",
+      ],
+
+      // Form
       form: {
-        account_number: '',
-        account_name: '',
-        account_type: 'Asset',
-        parent_id: '',
-        description: '',
-        is_active: true
-      }
+        account_number: "",
+        account_name: "",
+        account_type: "Asset",
+        parent_id: "",
+        description: "",
+        is_active: true,
+      },
     };
   },
+
   mounted() {
     this.loadAccounts();
   },
+
+  computed: {
+    filteredAccounts() {
+      let list = [...this.accounts];
+
+      // Search
+      if (this.search.trim() !== "") {
+        const keyword = this.search.toLowerCase();
+
+        list = list.filter((account) => {
+          return (
+            account.account_number.toLowerCase().includes(keyword) ||
+            account.account_name.toLowerCase().includes(keyword)
+          );
+        });
+      }
+
+      // Type Filter
+      if (this.typeFilter !== "all") {
+        list = list.filter(
+          (account) => account.account_type === this.typeFilter
+        );
+      }
+
+      // Status Filter
+      if (this.statusFilter !== "all") {
+        list = list.filter((account) => {
+          if (this.statusFilter === "active")
+            return account.is_active;
+
+          return !account.is_active;
+        });
+      }
+
+      return list;
+    },
+
+    treeAccounts() {
+      const map = {};
+
+      this.accounts.forEach((account) => {
+        map[account.id] = {
+          ...account,
+          children: [],
+        };
+      });
+
+      const roots = [];
+
+      Object.values(map).forEach((account) => {
+        if (account.parent_id && map[account.parent_id]) {
+          map[account.parent_id].children.push(account);
+        } else {
+          roots.push(account);
+        }
+      });
+
+      return roots;
+    },
+  },
+
   methods: {
     async loadAccounts() {
       this.loading = true;
+
       try {
-        const response = await fetch('/api/accounts', {
-          headers: { 'Accept': 'application/json' },
-          credentials: 'same-origin'
+        const response = await fetch("/api/accounts", {
+          headers: {
+            Accept: "application/json",
+          },
+          credentials: "same-origin",
         });
 
         if (!response.ok) {
-          throw new Error('Failed to load accounts');
+          throw new Error("Failed to load accounts");
         }
 
         this.accounts = await response.json();
@@ -121,41 +359,140 @@ export default {
         this.loading = false;
       }
     },
+
     async saveAccount() {
       try {
         const payload = { ...this.form };
-        if (payload.parent_id === '') payload.parent_id = null;
 
-        const response = await fetch('/api/accounts', {
-          method: 'POST',
+        if (payload.parent_id === "") {
+          payload.parent_id = null;
+        }
+
+        const response = await fetch("/api/accounts", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRF-TOKEN":
+              document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute("content") || "",
           },
           body: JSON.stringify(payload),
-          credentials: 'same-origin'
+          credentials: "same-origin",
         });
 
         if (!response.ok) {
-          throw new Error('Unable to save account');
+          throw new Error("Unable to save account");
         }
 
-        this.form = {
-          account_number: '',
-          account_name: '',
-          account_type: 'Asset',
-          parent_id: '',
-          description: '',
-          is_active: true
-        };
+        this.closeAccountModal();
+
         await this.loadAccounts();
       } catch (error) {
         console.error(error);
-        alert('Could not create the account.');
+        alert("Unable to save account.");
       }
-    }
-  }
+    },
+
+    updateForm(value) {
+      this.form = value;
+    },
+
+    selectAccount(account) {
+      this.selectedAccount = account;
+    },
+
+    toggleExpand(id) {
+      if (this.expandedIds.includes(id)) {
+        this.expandedIds = this.expandedIds.filter((item) => item !== id);
+      } else {
+        this.expandedIds.push(id);
+      }
+    },
+
+    resetForm() {
+      this.form = {
+        account_number: "",
+        account_name: "",
+        account_type: "Asset",
+        parent_id: "",
+        description: "",
+        is_active: true,
+      };
+    },
+
+    openCreateModal() {
+      this.modalMode = "create";
+
+      this.resetForm();
+
+      this.showAccountModal = true;
+    },
+
+    openEditModal(account) {
+      this.modalMode = "edit";
+
+      this.selectedAccount = account;
+
+      this.form = {
+        account_number: account.account_number,
+        account_name: account.account_name,
+        account_type: account.account_type,
+        parent_id: account.parent_id || "",
+        description: account.description || "",
+        is_active: account.is_active,
+      };
+
+      this.showAccountModal = true;
+    },
+
+    openChildModal(parent) {
+      this.modalMode = "create";
+
+      this.resetForm();
+
+      this.form.parent_id = parent.id;
+
+      this.showAccountModal = true;
+    },
+
+    closeAccountModal() {
+      this.showAccountModal = false;
+
+      this.resetForm();
+    },
+
+    openDeleteModal(account) {
+      this.selectedAccount = account;
+
+      this.showDeleteModal = true;
+    },
+
+    closeDeleteModal() {
+      this.showDeleteModal = false;
+    },
+
+    deleteAccount() {
+      /*
+        Backend DELETE endpoint
+        not yet implemented.
+      */
+
+      this.showDeleteModal = false;
+
+      alert(
+        "Delete endpoint has not been implemented yet."
+      );
+    },
+
+    viewLedger(account) {
+      console.log("Open ledger:", account);
+
+      // Future:
+      // this.$router.push(`/ledger/${account.id}`)
+    },
+  },
 };
 </script>

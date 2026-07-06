@@ -34,7 +34,7 @@
           <router-link
             to="/ChartOfAccounts"
             @click="isOpen = false"
-            class="block items-center gap-3 px-4 py-3 hover:bg-gray-100 text-decoration-none"
+            class="block items-center gap-3 px-4 py-3 text- text-decoration-none hover:bg-slate-900 hover:text-white"
           >
             <span class="h-2.5 w-2.5 rounded-full bg-green-500 inline-block"></span>
             Chart of Accounts
@@ -43,7 +43,7 @@
           <router-link
             to="/JournalEntry"
             @click="isOpen = false"
-            class="block items-center gap-3 px-4 py-3 hover:bg-gray-100 text-decoration-none"
+            class="block items-center gap-3 px-4 py-3 text-decoration-none hover:bg-slate-900 hover:text-white"
           >
             <span class="h-2.5 w-2.5 rounded-full bg-yellow-500 inline-block"></span>
             Journal Entries
@@ -52,18 +52,18 @@
           <router-link
             to="/GeneralLedger"
             @click="isOpen = false"
-            class="block items-center gap-3 px-4 py-3 hover:bg-gray-100 text-decoration-none"
+            class="block items-center gap-3 px-4 py-3 text-decoration-none hover:bg-slate-900 hover:text-white"
           >
             <span class="h-2.5 w-2.5 rounded-full bg-blue-500 inline-block"></span>
             General Ledger
           </router-link>
         </div>
       </div>
-        <div class="h-6 w-px bg-gray-400"></div>
+        <div class="h-6 w-px bg-slate-900 text-white"></div>
         <div class="relative">
         <button
           @click="Openis = !Openis"
-          class="bg-gray-400 rounded-full px-3 py-1 text-center text-white cursor-pointer hover:bg-gray-500 transition"
+          class="bg-slate-900 rounded-full px-3 py-1 text-center text-white cursor-pointer hover:bg-slate-700 transition"
         >
             <span>{{ userDisplayName }}</span>
         </button>

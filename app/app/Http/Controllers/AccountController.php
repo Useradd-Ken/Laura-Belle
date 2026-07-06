@@ -12,6 +12,7 @@ class AccountController extends Controller
         $accounts = Account::orderBy('account_number')->get();
 
         return response()->json($accounts);
+        
     }
 
     public function store(Request $request)

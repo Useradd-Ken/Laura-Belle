@@ -5,18 +5,18 @@
   </div>
 </template>
 
-<script>
-import { RouterView } from 'vue-router';
-import Nav from './components/nav.vue';
+  <script>
+  import { RouterView } from 'vue-router';
+  import Nav from './components/nav.vue';
 
-export default {
-  name: 'App',
-  components: {
-    RouterView,
-    Nav
-  }
-};
-</script>
+  export default {
+    name: 'App',
+    components: {
+      RouterView,
+      Nav
+    }
+  };
+  </script>
 
-<style scoped>
-</style>
+  <style scoped>
+  </style>

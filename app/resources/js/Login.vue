@@ -1,55 +1,136 @@
 <template>
-  <div class="min-h-screen bg-white text-white flex items-center justify-center">
-    <div class="text-center space-y-4 w-full max-w-md px-4">
-      <h1 class="text-4xl font-semibold bg-gradient-to-br from-cyan-500 to-blue-500 bg-clip-text text-transparent">
-        Welcome to Laura-Belle
-      </h1>
+  <div class="min-h-screen bg-white text-white flex items-center justify-center px-6">
+    <div class="grid lg:grid-cols-2 w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden">
 
-      <form @submit.prevent="submitLogin" class="space-y-2 flex flex-col items-center mt-10 w-full">
-        <div class="w-full p-[1px] rounded-md bg-gradient-to-br from-cyan-500 to-blue-500 focus-within:from-blue-500 focus-within:to-cyan-700">
-          <input
-            v-model="email"
-            type="email"
-            name="email"
-            placeholder="Email@gmail.com"
-            class="w-full px-2 py-2 rounded-md text-black bg-white outline-none"
-          />
-        </div>
+      <!-- Left Side -->
+      <div class="hidden lg:flex flex-col justify-center bg-gradient-to-br from-slate-900 via-white-600 to-indigo-700 text-white p-16">
+        <h1 class="text-5xl font-bold leading-tight">
+          Welcome Back
+        </h1>
 
-        <div class="w-full p-[1px] rounded-md bg-gradient-to-br from-cyan-500 to-blue-500 focus-within:from-blue-500 focus-within:to-cyan-700 mt-2">
-          <input
-            v-model="password"
-            type="password"
-            name="password"
-            placeholder="*********"
-            class="w-full px-2 py-2 rounded-md text-black bg-white outline-none"
-          />
-        </div>
+        <p class="mt-6 text-cyan-100 text-lg leading-relaxed">
+          Access your <span class="text-white-900 text-md font-bold">Laura-Belle</span> dashboard and continue managing your business with ease.
+        </p>
 
-        <div v-if="emailError" class="text-red-500 text-sm mt-1">{{ emailError }}</div>
-        <div v-if="passwordError" class="text-red-500 text-sm mt-1">{{ passwordError }}</div>
-        <div v-if="formError" class="text-red-500 text-sm mt-1">{{ formError }}</div>
-
-        <div class="flex justify-between w-full mt-2 text-sm text-gray-500">
-          <RouterLink to="/reset-password" class="cursor-pointer hover:underline">Forgot Password?</RouterLink>
-          <RouterLink to="/register" class="cursor-pointer hover:underline">Register</RouterLink>
-        </div>
-
-        <button
-          type="submit"
-          :disabled="loading"
-          class="relative group border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-light uppercase text-base mt-3"
-        >
-          <span class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-25 rounded-lg transform translate-y-0.5 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:translate-y-1 group-hover:duration-[250ms] group-active:translate-y-px"></span>
-          <span class="absolute top-0 left-0 w-full h-full rounded-lg bg-gradient-to-l from-[hsl(217,33%,16%)] via-[hsl(217,33%,32%)] to-[hsl(217,33%,16%)]"></span>
-          <div class="relative flex items-center justify-between py-3 px-6 text-lg text-white rounded-lg transform -translate-y-1 bg-gradient-to-r from-[#f27121] via-[#e94057] to-[#8a2387] gap-3 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:-translate-y-1.5 group-hover:duration-[250ms] group-active:-translate-y-0.5 brightness-100 group-hover:brightness-110">
-            <span class="select-none">{{ loading ? 'Signing in...' : 'Submit' }}</span>
-            <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2 -mr-1 transition duration-250 group-hover:translate-x-1">
-              <path clip-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" fill-rule="evenodd"></path>
-            </svg>
+        <div class="mt-12 space-y-5">
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-cyan-300"></div>
+            <span>Secure Authentication</span>
           </div>
-        </button>
-      </form>
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-cyan-300"></div>
+            <span>Fast Performance</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-cyan-300"></div>
+            <span>Real-time Inventory</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="flex items-center justify-center p-8 lg:p-16">
+
+        <div class="w-full max-w-md">
+
+          <div class="mb-10">
+            <h2 class="text-4xl font-bold text-slate-800">
+              Sign In
+            </h2>
+
+            <p class="text-slate-500 mt-2">
+              Welcome back! Please enter your details.
+            </p>
+          </div>
+
+          <form
+            @submit.prevent="submitLogin"
+            class="space-y-6"
+          >
+
+            <!-- Email -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-2">
+                Email
+              </label>
+
+              <input
+                v-model="email"
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                class="w-full text-slate-900 rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition duration-200 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+              />
+
+              <div
+                v-if="emailError"
+                class="text-red-500 text-sm mt-2"
+              >
+                {{ emailError }}
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-2">
+                Password
+              </label>
+
+              <input
+                v-model="password"
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                class="w-full text-slate-900 rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition duration-200 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+              />
+
+              <div
+                v-if="passwordError"
+                class="text-red-500 text-sm mt-2"
+              >
+                {{ passwordError }}
+              </div>
+            </div>
+
+            <div
+              v-if="formError"
+              class="text-red-500 text-sm"
+            >
+              {{ formError }}
+            </div>
+
+            <div class="flex justify-between text-sm">
+              <RouterLink
+                to="/reset-password"
+                class="text-cyan-600 hover:text-cyan-700 font-medium cursor-pointer"
+              >
+                Forgot Password?
+              </RouterLink>
+
+              <RouterLink
+                to="/register"
+                class="text-cyan-600 hover:text-cyan-700 font-medium cursor-pointer"
+              >
+                Register
+              </RouterLink>
+            </div>
+
+            <button
+              type="submit"
+              :disabled="loading"
+              class="w-full rounded-xl bg-gradient-to-br from-slate-900 via-white-600 to-indigo-700 text-white py-3.5 font-semibold text-white transition hover:bg-cyan-700 active:scale-[0.98] disabled:opacity-60 cursor-pointer"
+            >
+              {{ loading ? "Signing in..." : "Sign In" }}
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
     </div>
   </div>
 </template>
@@ -72,10 +153,13 @@ export default {
       this.passwordError = "";
       this.formError = "";
 
-      // if (!this.email.includes("@example.com")) {
-      //   this.emailError = "Email must be a Gmail address.";
-      //   return;
-      // }
+      if (!this.email.includes("@gmail.com")) {
+        this.emailError = "Email must be a Gmail address.";
+        return;
+      }
+
+      // console.log("Email: ", this.email);
+      // console.log("Password: ", this.password);
 
       const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
       if (!passwordRegex.test(this.password)) {
