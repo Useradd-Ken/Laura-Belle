@@ -11,10 +11,32 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+       Schema::create('accounts', function (Blueprint $table) {
+    $table->id();
+
+    $table->string('account_number',20)->unique();
+
+    $table->string('account_name');
+
+    $table->enum('account_type',[
+        'Asset',
+        'Liability',
+        'Equity',
+        'Revenue',
+        'Expense'
+    ]);
+
+    $table->foreignId('parent_id')
+          ->nullable()
+          ->constrained('accounts')
+          ->nullOnDelete();
+
+    $table->text('description')->nullable();
+
+    $table->boolean('is_active')->default(true);
+
+    $table->timestamps();
+});
     }
 
     /**

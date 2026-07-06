@@ -16,17 +16,21 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
-    public function login(Request $request){
-        
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
+
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials) ) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/accounting');
+            return redirect()->intended('/ChartOfAccounts')->with('success', 'Logged in successfully');
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);
-
     }
 
     /**
@@ -66,7 +70,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         // Redirect to the accounting page or any other page
-        return redirect('/accounting');
+        return redirect('/ChartOfAccounts')->with('success', 'Registration successful! You are now logged in.');
     }
 
 }

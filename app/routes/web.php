@@ -1,26 +1,33 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-// Login page - standalone
 Route::get('/', function () {
     return view('login');
-});
+})->name('login');
 
-// Accounting app pages - with Nav and Vue Router
-Route::get('/ChartOfAccounts', function () {
-    return view('accounting');
-});
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/JournalEntry', function () {
-    return view('accounting');
-});
+Route::middleware('auth')->group(function () {
+    Route::get('/accounting', function () {
+        return view('accounting');
+    });
 
-Route::get('/GeneralLedger', function () {
-    return view('accounting');
-});
+    Route::get('/ChartOfAccounts', function () {
+        return view('accounting');
+    });
 
-// Catch-all for Vue Router on accounting pages - must be last
-Route::get('accounting/{any}', function () {
-    return view('accounting');
-})->where('any', '.*');
+    Route::get('/JournalEntry', function () {
+        return view('accounting');
+    });
+
+    Route::get('/GeneralLedger', function () {
+        return view('accounting');
+    });
+
+    Route::get('accounting/{any}', function () {
+        return view('accounting');
+    })->where('any', '.*');
+});

@@ -11,10 +11,30 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_journal_entry', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+      Schema::create('journal_entries', function (Blueprint $table){
+
+    $table->id();
+
+    $table->date('entry_date');
+
+    $table->string('reference_no')->unique();
+
+    $table->string('description');
+
+    $table->enum('status',[
+        'Draft',
+        'Posted',
+        'Voided'
+    ])->default('Draft');
+
+    $table->foreignId('created_by')
+          ->constrained('users');
+
+    $table->timestamp('posted_at')->nullable();
+
+    $table->timestamps();
+
+});
     }
 
     /**
