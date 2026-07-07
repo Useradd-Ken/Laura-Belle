@@ -12,30 +12,35 @@ return new class extends Migration
     public function up(): void
     {
        Schema::create('accounts', function (Blueprint $table) {
-    $table->id();
+            $table->id();
 
-    $table->string('account_number',20)->unique();
+            // Owner of this Chart of Account
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-    $table->string('account_name');
+            $table->string('account_number', 20)->unique();
 
-    $table->enum('account_type',[
-        'Asset',
-        'Liability',
-        'Equity',
-        'Revenue',
-        'Expense'
-    ]);
+            $table->string('account_name');
 
-    $table->foreignId('parent_id')
-          ->nullable()
-          ->constrained('accounts')
-          ->nullOnDelete();
+            $table->enum('account_type', [
+                'Asset',
+                'Liability',
+                'Equity',
+                'Revenue',
+                'Expense'
+            ]);
 
-    $table->text('description')->nullable();
+            $table->foreignId('parent_id')
+                ->nullable()
+                ->constrained('accounts')
+                ->nullOnDelete();
 
-    $table->boolean('is_active')->default(true);
+            $table->text('description')->nullable();
 
-    $table->timestamps();
+            $table->boolean('is_active')->default(true);
+
+            $table->timestamps();
 });
     }
 

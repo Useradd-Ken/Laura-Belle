@@ -11,24 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('journal_entry_lines', function(Blueprint $table){
+     Schema::create('journal_entry_lines', function (Blueprint $table) {
 
-    $table->id();
+            $table->id();
 
-    $table->foreignId('journal_entry_id')
-          ->constrained()
-          ->cascadeOnDelete();
+            $table->foreignId('journal_entry_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-    $table->foreignId('account_id')
-          ->constrained('accounts');
+            $table->foreignId('account_id')
+                ->constrained()
+                ->restrictOnDelete();
 
-    $table->decimal('debit',15,2)->default(0);
+            $table->decimal('debit', 15, 2)->default(0);
 
-    $table->decimal('credit',15,2)->default(0);
+            $table->decimal('credit', 15, 2)->default(0);
 
-    $table->text('memo')->nullable();
+            $table->text('memo')->nullable();
 
-    $table->timestamps();
+            $table->timestamps();
 
 });
     }
@@ -38,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_journal_entry_line');
+        Schema::dropIfExists('journal_entry_lines');
     }
 };

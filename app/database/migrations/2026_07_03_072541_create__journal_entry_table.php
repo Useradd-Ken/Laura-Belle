@@ -11,29 +11,40 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('journal_entries', function (Blueprint $table){
+     Schema::create('journal_entries', function (Blueprint $table) {
+            $table->id();
 
-    $table->id();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-    $table->date('entry_date');
+            $table->date('entry_date');
 
-    $table->string('reference_no')->unique();
+            $table->string('reference_no')->unique();
 
-    $table->string('description');
+            $table->text('description')->nullable();
 
-    $table->enum('status',[
-        'Draft',
-        'Posted',
-        'Voided'
-    ])->default('Draft');
+            $table->enum('status', [
+                'Draft',
+                'Posted',
+                'Voided'
+            ])->default('Draft');
 
-    $table->foreignId('created_by')
-          ->constrained('users');
+            // Posting
+            $table->timestamp('posted_at')->nullable();
 
-    $table->timestamp('posted_at')->nullable();
+            // Void Information
+            $table->timestamp('voided_at')->nullable();
 
-    $table->timestamps();
+            $table->text('void_reason')->nullable();
 
+            // Links to the reversing entry
+            $table->foreignId('reversal_entry_id')
+                ->nullable()
+                ->constrained('journal_entries')
+                ->nullOnDelete();
+
+            $table->timestamps();
 });
     }
 

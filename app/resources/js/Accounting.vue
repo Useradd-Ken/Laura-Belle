@@ -229,28 +229,21 @@ export default {
   data() {
     return {
       loading: true,
-
       // API
       accounts: [],
-
       // UI
       search: "",
       typeFilter: "all",
       statusFilter: "all",
       viewMode: "tree",
-
       // Tree
       expandedIds: [],
-
       // Selected Account
       selectedAccount: null,
-
       // Modals
       showAccountModal: false,
       showDeleteModal: false,
-
       modalMode: "create",
-
       // Types
       accountTypes: [
         "Asset",
@@ -259,7 +252,6 @@ export default {
         "Revenue",
         "Expense",
       ],
-
       // Form
       form: {
         account_number: "",
@@ -482,13 +474,13 @@ export default {
 
       this.showDeleteModal = false;
 
-      alert(
-        "Delete endpoint has not been implemented yet."
-      );
+      // alert(
+      //   "Delete endpoint has not been implemented yet."
+      // );
     },
 
     viewLedger(account) {
-      console.log("Open ledger:", account);
+      // console.log("Open ledger:", account);
 
       // Future:
       // this.$router.push(`/ledger/${account.id}`)

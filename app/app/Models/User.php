@@ -18,6 +18,30 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * User's Chart of Accounts
+     */
+    public function accounts()
+    {
+        return $this->hasMany(Account::class);
+    }
+
+    /**
+     * User's Journal Entries
+     */
+    public function journalEntries()
+    {
+        return $this->hasMany(JournalEntry::class);
+    }
+
+    /**
+     * User's Audit Logs
+     */
+    public function auditLogs()
+    {
+        return $this->hasMany(AuditLog::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
