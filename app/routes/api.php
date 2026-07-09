@@ -14,3 +14,5 @@ Route::middleware(['web'])->group(function () {
     Route::get('/accounts', [AccountController::class, 'index']);
     Route::post('/accounts', [AccountController::class, 'store']);
 });
+
+

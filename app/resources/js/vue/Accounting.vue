@@ -15,9 +15,7 @@
               Manage your organization's accounting structure.
             </p>
           </div>
-
           <div class="flex items-center gap-3">
-
             <div class="rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-sm">
               <p class="text-xs uppercase tracking-wide text-slate-500">
                 Total Accounts
@@ -207,12 +205,13 @@
   </div>
 </template>
 <script>
-import SearchBar from "./components/SearchBar.vue";
-import AccountTree from "./components/AccountTree.vue";
-import AccountTable from "./components/AccountTable.vue";
-import AccountDetails from "./components/AccountDetails.vue";
-import AccountModal from "./components/AccountModal.vue";
-import DeleteModal from "./components/DeleteModal.vue";
+import SearchBar from "../components/SearchBar.vue";
+import AccountTree from "../components/AccountTree.vue";
+import AccountTable from "../components/AccountTable.vue";
+import AccountDetails from "../components/AccountDetails.vue";
+import AccountModal from "../components/AccountModal.vue";
+import DeleteModal from "../components/DeleteModal.vue";
+import "../../css/app.css";
 
 export default {
   name: "Accounting",

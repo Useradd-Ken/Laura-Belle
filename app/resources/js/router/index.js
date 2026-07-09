@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '../Login.vue';
-import Accounting from '../Accounting.vue';
-import JournalEntry from '../JournalEntry.vue';
-import GeneralLedger from '../GenLedger.vue';
+import Login from '../vue/Login.vue';
+import Accounting from '../vue/Accounting.vue';
+import JournalEntry from '../vue/JournalEntry.vue';
+import GeneralLedger from '../vue/GenLedger.vue';
+import Register from '../vue/Register.vue';
 
 const routes = [
   {
@@ -37,6 +38,14 @@ const routes = [
             requiresAuth: true
 
     }
+  },
+   {
+    path: '/',
+    name: 'Register',
+    component: Register,
+    meta: { title: 'Register',
+            guestOnly: true
+    }
   }
 ];
 
@@ -50,40 +59,5 @@ router.beforeEach((to, from, next) => {
   document.title = to.meta.title || 'Laura-Belle';
   next();
 });
-
-// router.beforeEach(async (to, from, next) => {
-//   document.title = to.meta.title || "Laura-Belle";
-
-//   try {
-//     const response = await fetch("/api/user", {
-//       credentials: "same-origin",
-//       headers: {
-//         Accept: "application/json"
-//       }
-//     });
-
-//     const authenticated = response.ok;
-
-//     // Protected pages
-//     if (to.meta.requiresAuth && !authenticated) {
-//       return next("/");
-//     }
-
-//     // Already logged in
-//     if (to.meta.guestOnly && authenticated) {
-//       return next("/ChartOfAccounts");
-//     }
-
-//     next();
-
-//   } catch (error) {
-
-//     if (to.meta.requiresAuth) {
-//       return next("/");
-//     }
-
-//     next();
-//   }
-// });
 
 export default router;
